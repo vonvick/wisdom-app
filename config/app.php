@@ -229,4 +229,16 @@ return [
 
     ],
 
+    /**
+     * Creating a config Array for seeding database with roles and users
+     */
+
+    'seeders' => [
+        'user' => [
+            'super_admin_password' => env('SUPER_ADMIN_DEFAULT_PASSWORD'),
+            'admin_password' => env('ADMIN_DEFAULT_PASSWORD'),
+            'executive_password' => env('EXECUTIVE_DEFAULT_PASSWORD'),
+            'member_password' => env('MEMBER_DEFAULT_PASSWORD')
+        ]
+    ]
 ];

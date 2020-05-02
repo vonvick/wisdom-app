@@ -2,9 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\User;
+use App\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,32 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'first_name' => $faker->name,
+        'last_name' => $faker->name,
+        'role_id' => $faker->biasedNumberBetween(1, 4),
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'password' => Hash::make(config('app.seeders.user.password')),
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->state(User::class, 'super admins', [
+    'role_id' => 1,
+    'password' => Hash::make(config('app.seeders.user.super_admin_password'))
+]);
+
+$factory->state(User::class, 'admins', [
+    'role_id' => 2,
+    'password' => Hash::make(config('app.seeders.user.admin_password'))
+]);
+
+$factory->state(User::class, 'executives', [
+    'role_id' => 3,
+    'password' => Hash::make(config('app.seeders.user.executive_password'))
+]);
+
+$factory->state(User::class, 'members', [
+    'role_id' => 4,
+    'password' => Hash::make(config('app.seeders.user.member_password'))
+]);
