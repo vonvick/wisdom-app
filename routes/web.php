@@ -12,10 +12,4 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/admin/{any}', function() {
-    return view('admin');
-})->where('any', '.*');
-
-Route::get('/app/{any}', function() {
-    return view('index');
-})->where('any', '.*');
+Route::get('/{any}', 'SpaController@index')->where('any', '.*');
