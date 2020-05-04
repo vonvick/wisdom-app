@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () {
+    Route::post('login', 'AuthController@login');
+
+    Route::group(['namespace'  => 'User'], static function () {
+        Route::get('news', 'NewsController@index');
+        Route::group(['middleware' => 'jwt.verify'], static function () {
+            Route::post('logout', 'AuthController@logout');
+        });
+    });
 });
