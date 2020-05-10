@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -32,7 +31,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         try {
-            if (!$token = auth('api')->attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 throw new Exception('invalid_credentials');
             }
 
@@ -53,27 +52,6 @@ class AuthController extends Controller
                 $this->data['code'] = 401;
             }
         }
-
-        return response()->json($this->data, $this->data['code']);
-    }
-
-    public function register (Request $request): JsonResponse
-    {
-        $user = User::create([
-            'first_name' => $request->post('first_name'),
-            'last_name' => $request->post('last_name'),
-            'email' => $request->post('email'),
-            'password' => Hash::make($request->post('password'))
-        ]);
-
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => [
-                'User' => $user
-            ],
-            'err' => null
-        ];
 
         return response()->json($this->data, $this->data['code']);
     }

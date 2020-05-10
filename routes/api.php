@@ -23,4 +23,8 @@ Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () 
             Route::post('logout', 'AuthController@logout');
         });
     });
+
+    Route::group(['namespace' => 'Admin', 'middleware' => 'jwt.verify'], static function() {
+        Route::post('register', 'UserController@register');
+    });
 });
