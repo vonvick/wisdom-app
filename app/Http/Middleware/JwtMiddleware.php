@@ -3,8 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Faker\Provider\Base;
-use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
@@ -36,7 +35,7 @@ class JwtMiddleware extends BaseMiddleware
                         ]
                     ]
                 );
-            }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
+            } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                 return response()->json(
                     [
                         'data' => null,
@@ -49,6 +48,7 @@ class JwtMiddleware extends BaseMiddleware
                 );
             }
             else{
+                print($e->getMessage());
                 if( $e->getMessage() === 'User Not Found') {
                     return response()->json(
                         [
@@ -59,7 +59,8 @@ class JwtMiddleware extends BaseMiddleware
                                 'code' => 1
                             ]
                         ]
-                    ); }
+                    );
+                }
                 return response()->json([
                         'data' => null,
                         'status' => false,
