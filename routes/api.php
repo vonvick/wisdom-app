@@ -16,13 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () {
     Route::post('login', 'AuthController@login');
+    Route::get('users', 'UserController@index');
+    Route::get('user/{id}', 'UserController@show');
 
-    Route::group(['namespace'  => 'User'], static function () {
-        Route::get('news', 'NewsController@index');
-        Route::group(['middleware' => 'jwt.verify'], static function () {
-            Route::post('logout', 'AuthController@logout');
-        });
-    });
+    // Route::group(['namespace'  => 'User'], static function () {
+    //     Route::get('news', 'NewsController@index');
+    //     Route::group(['middleware' => 'jwt.verify'], static function () {
+    //         Route::post('logout', 'AuthController@logout');
+    //     });
+    // });
 
     Route::group(['namespace' => 'Admin', 'middleware' => 'jwt.verify'], static function() {
         Route::post('register', 'UserController@register');

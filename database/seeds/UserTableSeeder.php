@@ -13,9 +13,9 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         // Users
-        factory(App\Models\User::class)->states('super admins')->create();
-        factory(App\Models\User::class)->states('admins')->create();
-        factory(App\Models\User::class, 2)->states('executives')->create();
-        factory(App\Models\User::class, 5)->states('members')->create();
+        factory(User::class)->states('super admins')->create();
+        factory(User::class)->states('admins')->create();
+        factory(User::class, 2)->states('executives')->create();
+        factory(User::class, 5)->states('members')->create();
     }
 }

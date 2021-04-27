@@ -64,4 +64,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function isAdministrator()
+    {
+        return $this->role()->slug === 'super_admin';
+    }
+
+    public function hasPermission($permission)
+    {
+        if (is_string($permission)) {
+            return $this->role()->permissions()->contains('name', $permission);
+        }
+        return !! $permission->intersect($this->role()->permissions)->count();
+    }
 }

@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function register (UserRequest $request): JsonResponse
     {
-        $member_role = Role::where('title', 'member')->first();
+        $member_role = Role::where('name', 'member')->first();
 
         $user = User::firstOrCreate(
             ['email' => $request->post('email')],
