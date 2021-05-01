@@ -13,3 +13,6 @@ yarn-error.log
 .vagrant
 Vagrantfile
 .idea/
+public/js
+public/css
+postgres_backup

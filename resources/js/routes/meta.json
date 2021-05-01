@@ -1,0 +1,22 @@
+{
+  "/": {
+    "requireAuth": false,
+    "adminRoute": false,
+    "authPage": false
+  },
+  "/login": {
+    "requiresAuth": false,
+    "authPage": true,
+    "adminRoute": false
+  },
+  "/register": {
+    "requiresAuth": true,
+    "authPage": false,
+    "adminRoute": true
+  },
+  "/app": {
+    "requiresAuth": false,
+    "authPage": false,
+    "adminRoute": false
+  }
+}
