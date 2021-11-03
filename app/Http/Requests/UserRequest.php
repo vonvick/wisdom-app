@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserRequest extends FormRequest
 {
@@ -15,7 +15,7 @@ class UserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -25,20 +25,17 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'first_name' => 'bail|required|min:2',
-            'last_name' => 'bail|required|min:2',
+            'first_name' => 'bail|min:2',
+            'last_name' => 'bail|min:2',
             'username' => 'bail|nullable|unique:users|min:2',
-            'email' => 'bail|required|unique:users|email',
-            'password' => 'nullable',
+            'email' => '|unique:users|email',
             'phone' => 'nullable',
             'occupation' => 'nullable',
             'headline' => 'nullable|min:20',
             'full_description' => 'nullable|max:2000',
-            'image_url' => 'nullable',
-            'thumbnail_url' => 'nullable'
         ];
     }
 
@@ -46,6 +43,6 @@ class UserRequest extends FormRequest
     {
         $errors = (new ValidationException($validator))->errors();
         throw new HttpResponseException(response()->json(['errors' => $errors
-        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+        ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

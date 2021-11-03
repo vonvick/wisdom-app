@@ -20,7 +20,7 @@ class CheckAdminRole
         try {
             $user_role = Role::find(auth()->user()->role_id);
 
-            if (!strpos($user_role->slug, 'admin')) {
+            if ((strpos($user_role->slug, 'admin')) === false) {
                 throw new Exception('User not permitted to perform such action');
             }
 
