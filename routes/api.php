@@ -32,6 +32,13 @@ Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () 
 
     Route::group(['namespace' => 'Admin', 'middleware' => 'jwt.verify'], static function() {
         Route::post('register', 'UserController@register');
-        Route::delete('user/{id}', 'UserController@delete');
+        Route::delete('user/{id}', 'UserController@deactivate');
+        Route::get('roles', 'RoleController@all');
+
+
+        Route::get('permissions', 'PermissionController@all');
+        Route::post('permissions/create', 'PermissionController@create');
+        Route::patch('permission/assign', 'PermissionController@assign');
+        Route::patch('permission/unassign', 'PermissionController@unassign');
     });
 });

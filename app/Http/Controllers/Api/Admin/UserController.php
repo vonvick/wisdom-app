@@ -55,7 +55,7 @@ class UserController extends Controller
      * @return JsonResponse
      * @throws AuthorizationException
      */
-    public function destroy(UserRequest $request): JsonResponse
+    public function deactivate(UserRequest $request): JsonResponse
     {
         $user = User::find($request->id);
         $this->authorize('users.delete', [$user, 'id']);

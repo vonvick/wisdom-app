@@ -36,14 +36,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Request $request
+     * @param Integer $id
      * @return JsonResponse
-     * @throws AuthorizationException
      */
-    public function show(Request $request): JSONResponse
+    public function show(int $id): JSONResponse
     {
-        $user = User::find($request->id);
-        $this->authorize('users.create', [$user, 'id']);
+        $user = User::find($id);
         $user->load('role');
 
         $this->data = [
@@ -64,7 +62,7 @@ class UserController extends Controller
     {
         $user = User::find($request->id);
         $this->authorize('users.update', [$user, 'id']);
-        $user->fill($request);
+        $user->fill($request->all());
         $user->load('role');
 
         $this->data = [
