@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
@@ -21,12 +23,17 @@ class Role extends Model
         'level' => 'int',
     ];
 
-    public function permissions()
+    public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions', 'role_id', 'permission_id');
+        return $this->belongsToMany(
+            Permission::class,
+            'role_permissions',
+            'role_id',
+            'permission_id'
+        );
     }
 
-    public function users()
+    public function users(): HasMany
     {
         return $this->hasMany(User::class, 'role_id');
     }
@@ -34,15 +41,16 @@ class Role extends Model
     /**
      * Determine if the user may perform the given permission.
      *
-     * @param  Permission $permission
+     * @param Permission $permission
+     * @param User $user
      * @return boolean
      */
-    public function hasPermission(Permission $permission, User $user)
+    public function hasPermission(Permission $permission, User $user): bool
     {
         if (is_string($permission)) {
             return $user->role()->permissions()->contains('name', $permission);
         }
-        return !! $user->roles()->permissions()->intersect($this->roles)->count();
+        return (bool)$user->role()->permissions()->intersect($this)->count();
     }
 
     /**
@@ -51,11 +59,11 @@ class Role extends Model
      * @param  mixed $permission
      * @return boolean
      */
-    public function inRole($permission)
+    public function inRole($permission): bool
     {
         if (is_string($permission)) {
-            return $this->permissions->contains('name', $permission);
+            return $this->permissions()->contains('name', $permission);
         }
-        return !! $permission->intersect($this->permissions)->count();
+        return (bool)$permission->intersect($this->permissions())->count();
     }
 }

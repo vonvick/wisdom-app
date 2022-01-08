@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserRequest extends FormRequest
+class PermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,14 +28,10 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'bail|min:2',
-            'last_name' => 'bail|min:2',
-            'username' => 'bail|nullable|unique:users|min:2',
-            'email' => 'unique:users|email',
-            'phone' => 'nullable',
-            'occupation' => 'nullable',
-            'headline' => 'nullable|min:20',
-            'full_description' => 'nullable|max:2000',
+            'name' => 'bail|required|min:2',
+            'slug' => 'bail|required|min:2',
+            'description' => 'bail|required|max:2000',
+            'active' => 'bail|nullable'
         ];
     }
 

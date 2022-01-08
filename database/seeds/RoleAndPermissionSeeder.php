@@ -88,6 +88,12 @@ class RoleAndPermissionSeeder extends Seeder
                 'description' => 'This permission is for the ability to see a permission',
                 'roles' => ['admin']
             ],
+            'create_permission' => [
+                'name' => 'Create a permission',
+                'slug' => 'permissions.create',
+                'description' => 'This permission is for the ability to create a permission',
+                'roles' => ['admin']
+            ],
             'view_roles' => [
                 'name' => 'View all roles',
                 'slug' => 'roles.index',

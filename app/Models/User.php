@@ -6,10 +6,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 //use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,15 +23,10 @@ class User extends Authenticatable implements JWTSubject
         'last_name',
         'username',
         'email',
-        'password',
         'phone',
         'occupation',
         'headline',
-        'full_description',
-        'image_url',
-        'thumbnail_url',
-        'is_active',
-        'role_id'
+        'full_description'
     ];
 
     /**
