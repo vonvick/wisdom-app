@@ -13,11 +13,6 @@ class RoleController extends Controller
 {
     protected $data = [];
 
-    public function __construct()
-    {
-        $this->middleware('admin.check');
-    }
-
     /**
      * @throws AuthorizationException
      */

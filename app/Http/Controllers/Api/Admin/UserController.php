@@ -15,11 +15,6 @@ class UserController extends Controller
 {
     protected $data = [];
 
-    public function __construct()
-    {
-        $this->middleware('admin.check');
-    }
-
     public function register (UserRequest $request): JsonResponse
     {
         $member_role = Role::where('slug', 'member')->first();

@@ -105,6 +105,24 @@ class RoleAndPermissionSeeder extends Seeder
                 'slug' => 'roles.show',
                 'description' => 'This permission is for the ability to see a role',
                 'roles' => ['admin']
+            ],
+            'create_post' => [
+                'name' => 'Create a post',
+                'slug' => 'posts.create',
+                'description' => 'This permission is for the ability to create a post',
+                'roles' => ['admin']
+            ],
+            'update_post' => [
+                'name' => 'Update a post',
+                'slug' => 'posts.update',
+                'description' => 'This permission is for the ability to update a post',
+                'roles' => ['admin']
+            ],
+            'delete_post' => [
+                'name' => 'Delete a post',
+                'slug' => 'posts.delete',
+                'description' => 'This permission is for the ability to delete a post',
+                'roles' => ['admin']
             ]
         ];
 
