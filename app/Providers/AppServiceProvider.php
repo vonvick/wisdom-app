@@ -4,12 +4,13 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Models\Permission;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Post;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
+            Relation::morphMap([
+                'posts' => Post::class
+            ]);
+
             function altPermissions ($permission): array
             {
                 $altPermissions = ['*', $permission];
