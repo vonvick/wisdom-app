@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
@@ -11,16 +11,18 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function response;
 
 class PostController extends Controller
 {
 
-    protected $data = [];
+    protected array $data = [];
+    protected ?\Illuminate\Contracts\Auth\Authenticatable $auth_user;
 
     /**
      * @throws AuthorizationException
      */
-    public function index(Request $request): JsonResponse
+    public function index(PostRequest $request): JsonResponse
     {
         $limit = $request->query('per_page', 15);
         $posts_cursor = Post::orderBy('created_at', 'desc')->paginate($limit);
@@ -34,27 +36,18 @@ class PostController extends Controller
      */
     public function create(PostRequest $request): JsonResponse
     {
-        $id = Auth::id();
-        $user = User::find($id);
-        $this->authorize('posts.create', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('posts.create', [$this->auth_user, 'id']);
 
         $post = new Post;
-        $post->title = $request->post('title');
-        $post->slug = $request->post('slug');
-        $post->content = $request->post('content');
-        $post->flag = $request->post('flag');
-        $post->user_id = $user->id;
+        $request->merge(['user_id' => $this->auth_user->id]);
+        $post = Post::create($request->all());
 
-        $post->save();
         $tag_ids = $this->_get_post_tags($request);
         $post->tags()->sync($tag_ids);
+        $post->load('tags');
 
-        $this->data = [
-            'status' => true,
-            'code' => 201,
-            'data' => $post,
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 201, 'data' => $post, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -67,12 +60,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $post->load('tags');
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => $post,
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 200, 'data' => $post, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -82,21 +70,17 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, int $id): JsonResponse
     {
-        $user_id = Auth::id();
-        $user = User::find($user_id);
-        $this->authorize('posts.update', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('posts.update', [$this->auth_user, 'id']);
 
         $post = Post::findOrFail($id);
+        $request->merge(['user_id' => $this->auth_user->id]);
         $post->save($request->all());
         $tag_ids = $this->_get_post_tags($request);
         $post->tags()->sync($tag_ids);
+        $post->load('tags');
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => $post,
-            'err' => null
-        ];
+        $this->data = [ 'status' => true, 'code' => 200, 'data' => $post, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -106,19 +90,13 @@ class PostController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        $user_id = Auth::id();
-        $user = User::find($user_id);
-        $this->authorize('posts.delete', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('posts.delete', [$this->auth_user, 'id']);
 
         $post = Post::findOrFail($id);
         $post->delete();
 
-        $this->data = [
-            'status' => true,
-            'code' => 204,
-            'data' => [],
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 204, 'data' => [], 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
