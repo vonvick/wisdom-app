@@ -17,33 +17,26 @@ use Illuminate\Support\Facades\Route;
 Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () {
     Route::post('login', 'AuthController@login');
     Route::group(['middleware' => 'jwt.verify'], static function() {
-        Route::post('logout', 'AuthController@logout');
-    });
+        Route::post('auth/logout', 'AuthController@logout');
 
-
-     Route::group(['namespace'  => 'User'], static function () {
-         Route::get('users', 'UserController@index');
-         Route::get('user/{id}', 'UserController@show');
-         Route::get('news', 'PostController@index');
-         Route::get('news/{id}', 'PostController@show');
-         Route::group(['middleware' => 'jwt.verify'], static function () {
-             Route::patch('user/{id}', 'UserController@update');
-         });
-     });
-
-    Route::group(['namespace' => 'Admin', 'middleware' => ['jwt.verify', 'admin.check']], static function() {
-        Route::post('register', 'UserController@register');
+        Route::post('user/register', 'UserController@register');
+        Route::patch('user/{id}', 'UserController@update');
         Route::delete('user/{id}', 'UserController@deactivate');
-        Route::get('roles', 'RoleController@all');
+        Route::get('users', 'UserController@index');
+        Route::get('user/{id}', 'UserController@show');
 
+
+        Route::get('roles', 'RoleController@all');
 
         Route::get('permissions', 'PermissionController@all');
         Route::post('permissions/create', 'PermissionController@create');
         Route::patch('permission/assign', 'PermissionController@assign');
         Route::patch('permission/unassign', 'PermissionController@unassign');
 
-        Route::post('posts', 'PostController@create');
-        Route::patch('posts/{id}', 'PostController@update');
+        Route::post('news', 'PostController@create');
+        Route::patch('news/{id}', 'PostController@update');
         Route::delete('posts/{id}', 'PostController@destroy');
+        Route::get('news', 'PostController@index');
+        Route::get('news/{id}', 'PostController@show');
     });
 });

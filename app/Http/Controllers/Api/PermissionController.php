@@ -1,40 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PermissionRequest;
 use App\Models\Permission;
-use App\Models\User;
 use App\Models\Role;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function response;
 
 class PermissionController extends Controller
 {
-    protected $data = [];
+    protected array $data = [];
+
+    protected ?\Illuminate\Contracts\Auth\Authenticatable $auth_user;
 
     /**
      * @throws AuthorizationException
      */
     public function all(): JsonResponse
     {
-        $id = Auth::id();
-        $user = User::find($id);
-        $this->authorize('permissions.index', [$user, 'id']);
-        $roles = Permission::all();
+        $this->auth_user = Auth::user();
+        $this->authorize('permissions.index', [$this->auth_user, 'id']);
+        $permissions = Permission::all();
 
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => [
-                'roles' => $roles
-            ],
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 200, 'data' => $permissions, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -44,9 +38,8 @@ class PermissionController extends Controller
      */
     public function create(PermissionRequest $request): JsonResponse
     {
-        $id = Auth::id();
-        $user = User::find($id);
-        $this->authorize('permissions.create', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('permissions.create', [$this->auth_user, 'id']);
 
         $permission = new Permission;
         $permission->name = $request->post('name');
@@ -66,14 +59,7 @@ class PermissionController extends Controller
 
         $permission->save();
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => [
-                'user' => $permission
-            ],
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 200, 'data' => $permission, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -83,23 +69,15 @@ class PermissionController extends Controller
      */
     public function assign(Request $request): JsonResponse
     {
-        $id = Auth::id();
-        $user = User::find($id);
-        $this->authorize('permissions.create', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('permissions.create', [$this->auth_user, 'id']);
 
         $permission = Permission::where('slug', $request->slug)->firstOrFail();
 
         $role = Role::findOrFail($request->role_id);
         $role->permissions()->attach($permission);
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => [
-                'role' => $role
-            ],
-            'err' => null
-        ];
+        $this->data = ['status' => true, 'code' => 200, 'data' => $role, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }
@@ -109,23 +87,15 @@ class PermissionController extends Controller
      */
     public function unassign(Request $request): JsonResponse
     {
-        $id = Auth::id();
-        $user = User::find($id);
-        $this->authorize('permissions.create', [$user, 'id']);
+        $this->auth_user = Auth::user();
+        $this->authorize('permissions.create', [$this->auth_user, 'id']);
 
         $permission = Permission::where('slug', $request->slug)->firstOrFail();
 
         $role = Role::findOrFail($request->role_id);
         $role->permissions()->detach($permission);
 
-        $this->data = [
-            'status' => true,
-            'code' => 200,
-            'data' => [
-                'role' => $role
-            ],
-            'err' => null
-        ];
+        $this->data = [ 'status' => true, 'code' => 200, 'data' => $role, 'err' => null];
 
         return response()->json($this->data, $this->data['code']);
     }

@@ -11,7 +11,7 @@ class Post extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'title', 'slug', 'content', 'flag'
+        'title', 'slug', 'content', 'flag', 'user_id'
     ];
     protected $casts = [
         'active' => 'bool',
