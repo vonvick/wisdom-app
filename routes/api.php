@@ -38,5 +38,15 @@ Route::group([ 'middleware' => 'api', 'namespace' => 'Api'], static function () 
         Route::delete('posts/{id}', 'PostController@destroy');
         Route::get('news', 'PostController@index');
         Route::get('news/{id}', 'PostController@show');
+
+        Route::post('media/upload', 'FileUploadController@handleMediaUpload');
+        Route::patch('media/{id}', 'FileUploadController@update');
+        Route::delete('media/{id}', 'FileUploadController@delete');
+
+        Route::get('/galleries', 'GalleryController@index');
+        Route::get('/gallery/{id}', 'GalleryController@show');
+        Route::post('/gallery', 'GalleryController@create');
+        Route::patch('/gallery/{id}', 'GalleryController@update');
+        Route::delete('/gallery/{id}', 'GalleryController@destroy');
     });
 });

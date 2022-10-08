@@ -123,6 +123,42 @@ class RoleAndPermissionSeeder extends Seeder
                 'slug' => 'posts.delete',
                 'description' => 'This permission is for the ability to delete a post',
                 'roles' => ['admin']
+            ],
+            'create_media_upload' => [
+                'name' => 'Media Upload',
+                'slug' => 'media.upload',
+                'description' => 'This permission is the ability upload a media file',
+                'roles' => ['admin', 'executives', 'members']
+            ],
+            'delete_media_upload' => [
+                'name' => 'Media Delete',
+                'slug' => 'media.delete',
+                'description' => 'This permission is the ability delete a media file',
+                'roles' => ['admin']
+            ],
+            'update_media_details' => [
+                'name' => 'Media Update',
+                'slug' => 'media.update',
+                'description' => 'This permission is the ability update a media description and privacy level',
+                'roles' => ['admin', 'executives', 'members']
+            ],
+            'create_gallery' => [
+                'name' => 'Create media gallery',
+                'slug' => 'gallery.create',
+                'description' => 'This permission is for the ability to create a media gallery',
+                'roles' => ['admin', 'executives', 'members']
+            ],
+            'update_gallery' => [
+                'name' => 'Update a gallery',
+                'slug' => 'gallery.update',
+                'description' => 'This permission is for the ability to update a media gallery',
+                'roles' => ['admin']
+            ],
+            'delete_gallery' => [
+                'name' => 'Delete A Media Gallery',
+                'slug' => 'gallery.delete',
+                'description' => 'This permission is for the ability to delete a media gallery',
+                'roles' => ['admin']
             ]
         ];
 
